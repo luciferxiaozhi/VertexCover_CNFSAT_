@@ -267,10 +267,11 @@ void Graph::vertexCover()// k refers to the number of vertex
     int k = 0;
     int n = this->maxVertex;
     bool res = false;
-    k += 1;
-    while(k <= this->maxVertex)
+    int lo = 1;
+    int hi = n;
+    while(lo < hi)
     {   
-
+        k = lo + (hi - lo)/2;
         // create & initialize x
         std::vector<std::vector<Minisat::Lit> > x(n);
 
@@ -332,29 +333,95 @@ void Graph::vertexCover()// k refers to the number of vertex
         }
         // if UNSAT res == 0, if SAT res == 1
         res = solver->solve();
-        if(res)
+        if(res == 1)
         {
-            // Find vertex cover           
-            for(int i = 0; i < n; i++)
-            {
-                for(int j = 0; j < k; j++)
-                {
-                    if(Minisat::toInt(solver->modelValue(x[i][j])) == 0)
-                    {
-                        this->printVector_CNF.push_back(i);
-                    }
-                }
-            }
-            //sort
-            std::sort(this->printVector_CNF.begin(), this->printVector_CNF.end(), std::less<int>());
-            countVec++;
-            solver.reset (new Minisat::Solver());
-            break;
+            hi = k;
+        }
+        else
+        {
+            lo = k + 1;
         }
         x.clear();
         solver.reset (new Minisat::Solver());
         k++;
     }
+    k = lo;
+    // create & initialize x
+    std::vector<std::vector<Minisat::Lit> > x(n);
+
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < k; j++)
+        {
+            Minisat::Lit l = Minisat::mkLit(solver->newVar());
+            x[i].push_back(l);
+        }
+    }
+
+    // 1. At least one vertex is the ith vertex in the vertex cover
+    for(int i = 0; i < k; i++)
+    {
+        Minisat::vec<Minisat::Lit> tmpVec;
+        for(int j = 0; j < n; j++)
+        {
+            tmpVec.push(x[j][i]);
+        }
+        solver->addClause(tmpVec);
+        tmpVec.clear();
+    }
+    // 2. No one vertex can appear twice in a vertex cover
+    for(int m = 0; m < n; m++)
+    {
+        for(int p = 0; p < k - 1; p++)
+        {
+            for(int q = p+1; q < k; q++)
+            {
+                solver->addClause(~x[m][p], ~x[m][q]);
+            }
+        }
+    }
+
+    // 3. No more than one vertex appears in the mth position of the vertex cover.
+    for(int m = 0; m < k; m++)
+    {
+        for(int p = 0; p < n - 1; p++)
+        {
+            for(int q = p + 1; q < n; q++)
+            {
+                solver->addClause(~x[p][m], ~x[q][m]);
+            }
+        }
+    }
+    // 4. Every edge is incident to at least one vertex in the vertex cover
+    
+    for(int i = 0; i < this->edgesVector.size(); i++)
+    {
+        Minisat::vec<Minisat::Lit> tmpVec;
+        for(int m = 0; m < k; m++)
+        {
+            tmpVec.push(x[this->edgesVector[i][0]->order][m]);
+            tmpVec.push(x[this->edgesVector[i][1]->order][m]);
+        }
+        solver->addClause(tmpVec);
+        tmpVec.clear();
+    }
+    // if UNSAT res == 0, if SAT res == 1
+    res = solver->solve();
+    // Find vertex cover           
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < k; j++)
+        {
+            if(Minisat::toInt(solver->modelValue(x[i][j])) == 0)
+            {
+                this->printVector_CNF.push_back(i);
+            }
+        }
+    }
+    //sort
+    std::sort(this->printVector_CNF.begin(), this->printVector_CNF.end(), std::less<int>());
+    countVec++;
+    solver.reset (new Minisat::Solver());
 }
 
 void Graph::Approx1()
