@@ -119,6 +119,10 @@ The reduction consists of the following rules:
 3. No more than one vertex appears in the same position of the vertex cover.
 4. Every edge is incident to at least one vertex in the vertex cover.
 
+**Attention:**
+
+This method takes exponential time as the size of input, so if the size of V is large, it will take a lot of time to compute. However, it is guaranteed to be optimal.
+
 ### 2.5 MiniSAT Solver
 MiniSAT is one of the most famous modern SAT-solvers.
 1. written in C++.
