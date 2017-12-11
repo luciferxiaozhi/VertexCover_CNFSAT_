@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <vector>
 #include <signal.h>
+#include <sys/wait.h>
 
 int procCin(void) {
     while (!std::cin.eof()) {
@@ -76,35 +77,12 @@ int main (int argc, char **argv) {
     close(A1BtoA2[1]);
     int res = procCin();
 
+    // send kill signal to all children
     for(pid_t k : kids)
     {
         int status;
         kill(k, SIGTERM);
+        waitpid(k, &status, 0);
     }
     return res;
 }
-/*
-a "btklk street" (-3,-5)(4,-3)
-a "twmoo street" (-1,2)(4,3)(-1,1)
-a "swjbh street" (4,6)(-5,-5)(-1,6)
-a "usfrz street" (1,1)(-4,6)(0,6)(4,0)(5,-3)(-1,-2)
-a "vxybh street" (0,4)(0,-5)
-a "ivotn street" (-3,-2)(-3,5)(5,6)(-3,-3)(-1,0)(-2,5)
-a "egsso street" (6,-4)(-3,3)(5,-1)(-4,6)(4,0)
-a "ynaza street" (-1,2)(-3,-1)(-4,1)(-3,6)(3,0)
-a "zlxxo street" (3,0)(2,1)(-1,5)(-6,-4)(-3,1)
-
-
-
-a "zamyk street" (20,-3)(18,6)
-a "afxnl street" (15,19)(-11,-4)(-9,5)(-11,13)(-12,0)(-17,-1)(-5,-13)(-13,-11)
-a "pvfvl street" (18,4)(3,2)(11,-5)(-8,4)(-11,12)
-a "paoyu street" (17,15)(15,-5)(19,-20)(-8,-18)
-a "zrmfq street" (16,2)(2,9)(-9,-8)(-13,4)
-a "neulf street" (-6,15)(-20,-6)(8,-8)(-1,-6)(11,14)(-12,0)(9,17)(-8,3)
-a "ksrun street" (3,6)(-14,-5)(-6,-19)(8,-8)(-12,-6)
-a "zndku street" (-6,-4)(6,2)
-a "trqrs street" (-17,4)(-16,-6)
-a "wicsn street" (-13,14)(-1,9)(-4,-1)(14,14)
-
-*/
