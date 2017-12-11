@@ -35,7 +35,7 @@ int main(int argc, char **argv)
     // do not print default error message
     opterr = 0;
 
-    // sNum: the number of streets, [2,k], default 4.
+    // sNum: the number of streets, [2,k], default 3.
     unsigned int sNum = 3;
     // nNum: The number of line-segments, [1,k], default 3.
     unsigned int nNum = 3;
