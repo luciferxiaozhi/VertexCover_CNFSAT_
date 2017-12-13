@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(ece_prj)
+project(VertexCover_CNFSAT_)
 
 if (EXISTS "${CMAKE_SOURCE_DIR}/minisat")
   add_subdirectory(minisat)
