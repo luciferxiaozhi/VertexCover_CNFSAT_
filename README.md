@@ -1,7 +1,7 @@
 # VertexCover_CNFSAT_
 github: https://github.com/luciferxiaozhi/Project_VC_SP
 ## 1. Introduction
-The project is to help the local police department with their installation of security cameras at traffic intersections. It solve a particular kind of optimization problem, called the **Vertex Cover** problem. The idea is for the police to be able to minimize the number of cameras they need to install, and still be as effective as possible with their monitoring. It uses **BFS** algorithm to solve a shortest path problem as well.
+The project is to help the local police department with their installation of security cameras at traffic intersections. It solves a particular kind of optimization problem, called the **Vertex Cover** problem. The idea is for the police to be able to minimize the number of cameras they need to install, and still be as effective as possible with their monitoring. It uses **BFS** algorithm to solve a shortest path problem as well.
 ### 1.1 General structure
 It generates several commands at the beginning from random generator, then the Python script will read these commands and generate a graph. After that, another program will read the graph and calculate the vertex cover of the graph in 3 different ways. It achieve information transfermation through **pipe**. Meanwhile, it can also generate shortest path from one vertex to another if user enters a certain command. The Driver has the overall contral of **.cpp** and **.py** files. The project achieves concurrently executing files by **multi-process** and **multi-threads**. 
 ### 1.2 Files include
@@ -10,7 +10,7 @@ It generates several commands at the beginning from random generator, then the P
 2. rgen.cpp
 3. GenVEFromRgen.py, compareStreet.py, intersection.py
 4. SPandVC.cpp
-5. directory: minisat
+5. Directory: minisat
 6. CMakeList.txt
 
 ### 1.3 Compile steps
